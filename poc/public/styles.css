@@ -1,0 +1,29 @@
+:root { --bg: #0f0f12; --surface: #1a1a1f; --text: #e8e6e3; --textMuted: #9a9894; --accent: #7c9cff; --partA: #6ee7b7; --partB: #fcd34d; --partC: #f472b6; --border: #2e2e36; }
+* { box-sizing: border-box; }
+body { margin: 0; min-height: 100vh; background: var(--bg); color: var(--text); font-family: system-ui, sans-serif; line-height: 1.5; }
+.header { padding: 2rem 1.5rem; background: var(--surface); border-bottom: 1px solid var(--border); }
+.header h1 { margin: 0 0 0.25rem 0; font-size: 1.5rem; }
+.tagline { margin: 0; color: var(--textMuted); font-size: 0.9rem; }
+.main { max-width: 1000px; margin: 0 auto; padding: 1.5rem; }
+.controls { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; padding: 1rem; background: var(--surface); border-radius: 8px; }
+.controls label { margin-right: 0.25rem; }
+.controls select { padding: 0.4rem 0.6rem; background: #24242b; border: 1px solid var(--border); border-radius: 6px; color: var(--text); }
+.pathway-section.hidden { display: none; }
+.pathway-chain { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; padding: 1rem; background: var(--surface); border-radius: 8px; margin-bottom: 1.5rem; }
+.pathway-node { padding: 0.4rem 0.6rem; border-radius: 6px; font-size: 0.85rem; }
+.pathway-node.part-A { background: rgba(110,231,183,0.2); color: var(--partA); }
+.pathway-node.part-B { background: rgba(252,211,77,0.2); color: var(--partB); }
+.pathway-node.part-C { background: rgba(244,114,182,0.2); color: var(--partC); }
+.pathway-arrow { color: var(--textMuted); }
+.graph { padding: 1rem; background: var(--surface); border-radius: 8px; margin-bottom: 1.5rem; }
+.graph-part { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
+.graph-node { padding: 0.4rem 0.6rem; border-radius: 6px; font-size: 0.8rem; }
+.graph-node.part-A { background: rgba(110,231,183,0.15); color: var(--partA); }
+.graph-node.part-B { background: rgba(252,211,77,0.15); color: var(--partB); }
+.graph-node.part-C { background: rgba(244,114,182,0.15); color: var(--partC); }
+.modules-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 0.75rem; }
+.module-card { padding: 1rem; background: var(--surface); border-radius: 8px; border: 1px solid var(--border); }
+.module-card .code { font-weight: 600; color: var(--accent); }
+.module-card .title { font-size: 0.9rem; }
+.module-card .meta { font-size: 0.75rem; color: var(--textMuted); }
+h2 { font-size: 1.1rem; margin: 0 0 0.5rem 0; }

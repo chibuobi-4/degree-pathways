@@ -1,0 +1,119 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  role         String   @default("VIEWER")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model University {
+  id        String      @id @default(cuid())
+  name      String
+  country   String?
+  url       String?
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  programmes Programme[]
+
+  @@unique([name, country])
+}
+
+model Programme {
+  id             String            @id @default(cuid())
+  universityId   String
+  name           String
+  award          String?
+  durationYears  Int?
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  university     University        @relation(fields: [universityId], references: [id], onDelete: Cascade)
+  catalogueYears CatalogueVersion[]
+  skills         Skill[]
+
+  @@unique([universityId, name])
+}
+
+model CatalogueVersion {
+  id           String   @id @default(cuid())
+  programmeId  String
+  academicYear String
+  isActive     Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  programme    Programme @relation(fields: [programmeId], references: [id], onDelete: Cascade)
+  modules      Module[]
+
+  @@unique([programmeId, academicYear])
+}
+
+model Module {
+  id                 String   @id @default(cuid())
+  catalogueVersionId String
+  code               String
+  title              String
+  part               String
+  credits            Int?
+  description        String?
+  required           Boolean  @default(false)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  catalogueVersion CatalogueVersion @relation(fields: [catalogueVersionId], references: [id], onDelete: Cascade)
+  moduleSkills     ModuleSkill[]
+  prerequisites    Prerequisite[]   @relation("ModulePrereqs")
+  requiredFor      Prerequisite[]   @relation("ModuleIsPrereqFor")
+
+  @@unique([catalogueVersionId, code])
+  @@index([catalogueVersionId, part])
+}
+
+model Skill {
+  id          String   @id @default(cuid())
+  programmeId String
+  name        String
+  category    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  programme   Programme   @relation(fields: [programmeId], references: [id], onDelete: Cascade)
+  moduleLinks ModuleSkill[]
+
+  @@unique([programmeId, name])
+}
+
+model ModuleSkill {
+  moduleId   String
+  skillId    String
+  strength   Int?
+  createdAt  DateTime  @default(now())
+
+  module     Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  skill      Skill  @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@id([moduleId, skillId])
+  @@index([skillId])
+}
+
+model Prerequisite {
+  id              String   @id @default(cuid())
+  moduleId        String
+  prereqModuleId  String
+  type            String   @default("PREREQUISITE")
+  createdAt       DateTime @default(now())
+
+  module         Module @relation("ModulePrereqs", fields: [moduleId], references: [id], onDelete: Cascade)
+  prereqModule   Module @relation("ModuleIsPrereqFor", fields: [prereqModuleId], references: [id], onDelete: Cascade)
+
+  @@unique([moduleId, prereqModuleId, type])
+  @@index([prereqModuleId])
+}

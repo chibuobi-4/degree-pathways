@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Degree Programme Pathways (POC)</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="header">
+    <h1>Degree Programme Pathways</h1>
+    <p class="tagline">POC — modules and prerequisite chains</p>
+  </header>
+  <main class="main">
+    <section class="controls">
+      <label>Skill filter</label>
+      <select id="skill-filter"><option value="">All</option></select>
+      <label>View pathway for</label>
+      <select id="module-pick"><option value="">Select module</option></select>
+    </section>
+    <section id="pathway-section" class="pathway-section hidden">
+      <h2>Pathway to <span id="pathway-module-title"></span></h2>
+      <div id="pathway-chain" class="pathway-chain"></div>
+    </section>
+    <section class="graph-section">
+      <h2>Module graph</h2>
+      <div id="graph" class="graph"></div>
+    </section>
+    <section class="modules-section">
+      <h2>Modules</h2>
+      <div id="modules-list" class="modules-list"></div>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

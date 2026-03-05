@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:16
+    container_name: degree_pathways_db
+    environment:
+      POSTGRES_USER: degree_user
+      POSTGRES_PASSWORD: degree_pass
+      POSTGRES_DB: degree_pathways
+    ports:
+      - "5432:5432"
+    volumes:
+      - degree_pathways_pg:/var/lib/postgresql/data
+
+volumes:
+  degree_pathways_pg:

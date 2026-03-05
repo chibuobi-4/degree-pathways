@@ -1,0 +1,27 @@
+{
+  "skills": [
+    { "id": "prog", "name": "Programming" },
+    { "id": "db", "name": "Databases" },
+    { "id": "ml", "name": "Machine Learning" },
+    { "id": "se", "name": "Software Engineering" },
+    { "id": "math", "name": "Mathematics" },
+    { "id": "stats", "name": "Statistics" },
+    { "id": "net", "name": "Networks" },
+    { "id": "sec", "name": "Security" }
+  ],
+  "modules": [
+    { "id": "CS101", "code": "CS101", "title": "Introduction to Programming", "part": "A", "credits": 15, "skills": ["prog", "math"] },
+    { "id": "CS102", "code": "CS102", "title": "Data Structures", "part": "A", "credits": 15, "skills": ["prog", "math"] },
+    { "id": "CS103", "code": "CS103", "title": "Mathematics for Computer Science", "part": "A", "credits": 15, "skills": ["math"] },
+    { "id": "CS104", "code": "CS104", "title": "Introduction to Databases", "part": "A", "credits": 15, "skills": ["db", "prog"] },
+    { "id": "CS201", "code": "CS201", "title": "Algorithms", "part": "B", "credits": 15, "skills": ["prog", "math"], "prerequisites": ["CS101", "CS102"] },
+    { "id": "CS202", "code": "CS202", "title": "Software Engineering", "part": "B", "credits": 15, "skills": ["se", "prog"], "prerequisites": ["CS101", "CS102"] },
+    { "id": "CS203", "code": "CS203", "title": "Database Systems", "part": "B", "credits": 15, "skills": ["db", "prog"], "prerequisites": ["CS104", "CS102"] },
+    { "id": "CS204", "code": "CS204", "title": "Probability and Statistics", "part": "B", "credits": 15, "skills": ["math", "stats"], "prerequisites": ["CS103"] },
+    { "id": "CS205", "code": "CS205", "title": "Computer Networks", "part": "B", "credits": 15, "skills": ["net", "prog"], "prerequisites": ["CS101", "CS103"] },
+    { "id": "CS301", "code": "CS301", "title": "Machine Learning", "part": "C", "credits": 15, "skills": ["ml", "stats", "prog"], "prerequisites": ["CS201", "CS204"] },
+    { "id": "CS302", "code": "CS302", "title": "Advanced Software Engineering", "part": "C", "credits": 15, "skills": ["se", "prog"], "prerequisites": ["CS202", "CS203"] },
+    { "id": "CS303", "code": "CS303", "title": "Network Security", "part": "C", "credits": 15, "skills": ["net", "sec", "prog"], "prerequisites": ["CS205", "CS201"] },
+    { "id": "CS304", "code": "CS304", "title": "Data Science Project", "part": "C", "credits": 30, "skills": ["ml", "db", "stats", "se"], "prerequisites": ["CS301", "CS203", "CS204"] }
+  ]
+}
