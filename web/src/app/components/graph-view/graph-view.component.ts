@@ -10,6 +10,16 @@ interface NodeLayout {
   height: number;
 }
 
+interface PartBand {
+  part: string;
+  label: string;
+  labelWidth: number;
+  x: number;
+  y: number;
+  height: number;
+  width: number;
+}
+
 @Component({
   selector: 'app-graph-view',
   standalone: true,
@@ -21,10 +31,14 @@ export class GraphViewComponent implements OnChanges {
   @Input() nodes: GraphNode[] = [];
   @Input() edges: GraphEdge[] = [];
   @Input() selectedId: string | null = null;
+  @Input() pathwayNodeIds: string[] = [];
   @Output() nodeClick = new EventEmitter<GraphNode>();
 
   layout: NodeLayout[] = [];
-  viewBox = '0 0 800 400';
+  partBands: PartBand[] = [];
+  viewBox = '0 0 800 480';
+  viewBoxWidth = 800;
+  viewBoxHeight = 480;
   transform = 'translate(0,0) scale(1)';
   private scale = 1;
   private panX = 0;
@@ -32,6 +46,12 @@ export class GraphViewComponent implements OnChanges {
   private isDragging = false;
   private startX = 0;
   private startY = 0;
+
+  readonly PART_LABELS: Record<string, string> = {
+    A: 'Part A — Foundation',
+    B: 'Part B — Core',
+    C: 'Part C — Advanced'
+  };
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['nodes'] || changes['edges']) {
@@ -41,30 +61,67 @@ export class GraphViewComponent implements OnChanges {
 
   private computeLayout(): void {
     const partOrder = ['A', 'B', 'C'];
-    const nodeWidth = 72;
-    const nodeHeight = 36;
-    const rowGap = 100;
-    const colGap = 90;
-    const startX = 80;
-    const startY = 60;
+    const nodeWidth = 76;
+    const nodeHeight = 38;
+    const rowHeight = 120;
+    const colGap = 88;
+    const paddingRight = 80;
+    const bandPadding = 24;
+    /** Left margin reserved for Part A/B/C labels so nodes never overlap them */
+    const labelColumnWidth = 240;
+    const labelGap = 20;
+    const contentMinWidth = 460;
+    const contentWidth = Math.max(contentMinWidth, 800 - labelColumnWidth - labelGap - paddingRight);
 
     this.layout = [];
+    this.partBands = [];
+    let currentY = bandPadding;
+    let maxContentX = 0;
+
     partOrder.forEach((part, rowIndex) => {
       const partNodes = this.nodes.filter(n => n.part === part);
+      if (partNodes.length === 0) return;
+
+      const totalRowWidth = partNodes.length * nodeWidth + (partNodes.length - 1) * colGap;
+      const startX = labelColumnWidth + labelGap + Math.max(0, (contentWidth - totalRowWidth) / 2);
+      const rowRight = startX + totalRowWidth;
+      if (rowRight > maxContentX) maxContentX = rowRight;
+
+      const bandY = currentY - 8;
+      const bandH = rowHeight - 16;
+
+      const label = this.PART_LABELS[part] || `Part ${part}`;
+      const labelWidth = Math.min(200, Math.max(140, label.length * 9));
+      this.partBands.push({
+        part,
+        label,
+        labelWidth,
+        x: 0,
+        y: bandY,
+        height: bandH,
+        width: 800
+      });
+
       partNodes.forEach((node, i) => {
         this.layout.push({
           node,
           x: startX + i * (nodeWidth + colGap),
-          y: startY + rowIndex * (nodeHeight + rowGap),
+          y: currentY + (bandH - nodeHeight) / 2,
           width: nodeWidth,
           height: nodeHeight
         });
       });
+
+      currentY += rowHeight;
     });
 
-    const maxX = Math.max(...this.layout.map(l => l.x + l.width), 400);
-    const maxY = Math.max(...this.layout.map(l => l.y + l.height), 300);
-    this.viewBox = `0 0 ${maxX + 80} ${maxY + 60}`;
+    const maxX = Math.max(800, maxContentX + paddingRight);
+    const maxY = currentY + bandPadding;
+    this.viewBoxWidth = maxX;
+    this.viewBoxHeight = maxY;
+    this.viewBox = `0 0 ${maxX} ${maxY}`;
+
+    this.partBands.forEach(b => b.width = maxX);
   }
 
   getNodeById(id: string): NodeLayout | undefined {
@@ -81,6 +138,15 @@ export class GraphViewComponent implements OnChanges {
     const y2 = to.y;
     const midY = (y1 + y2) / 2;
     return `M ${x1} ${y1} C ${x1} ${midY}, ${x2} ${midY}, ${x2} ${y2}`;
+  }
+
+  isInPathway(nodeId: string): boolean {
+    return this.pathwayNodeIds.length === 0 || this.pathwayNodeIds.includes(nodeId);
+  }
+
+  isPathwayEdge(edge: GraphEdge): boolean {
+    if (this.pathwayNodeIds.length === 0) return true;
+    return this.pathwayNodeIds.includes(edge.from) && this.pathwayNodeIds.includes(edge.to);
   }
 
   onNodeClick(node: GraphNode): void {

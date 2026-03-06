@@ -1,17 +1,29 @@
 <div class="graph-container" (wheel)="onWheel($event)" (pointerdown)="onPointerDown($event)" (pointermove)="onPointerMove($event)" (pointerup)="onPointerUp($event)" (pointerleave)="onPointerUp($event)">
-  <svg [attr.viewBox]="viewBox" class="graph-svg" [style.transform]="transform">
+  <svg [attr.viewBox]="viewBox" class="graph-svg" preserveAspectRatio="xMidYMid meet" [style.transform]="transform">
+    <rect class="svg-bg" [attr.x]="0" [attr.y]="0" [attr.width]="viewBoxWidth" [attr.height]="viewBoxHeight" fill="#f1f5f9" />
     <defs>
-      <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
-        <path d="M0,0 L0,6 L9,3 z" fill="var(--edge)" />
+      <!-- Larger, clearer arrows: point downward = prerequisite flow (Part A → B → C) -->
+      <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+        <path d="M0,0 L0,12 L12,6 z" fill="#818cf8" />
+      </marker>
+      <marker id="arrow-pathway" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+        <path d="M0,0 L0,12 L12,6 z" fill="#a78bfa" />
       </marker>
     </defs>
+    <g class="part-bands">
+      <rect *ngFor="let band of partBands" [attr.x]="band.x" [attr.y]="band.y" [attr.width]="band.width" [attr.height]="band.height" class="band-rect" [attr.data-part]="band.part" />
+      <g *ngFor="let band of partBands" class="band-label-wrap" [attr.data-part]="band.part">
+        <rect [attr.x]="band.x + 12" [attr.y]="band.y + (band.height - 26) / 2" [attr.width]="band.labelWidth" [attr.height]="26" rx="6" class="band-label-bg" />
+        <text [attr.x]="band.x + 12 + band.labelWidth / 2" [attr.y]="band.y + band.height / 2" class="band-label" text-anchor="middle" dominant-baseline="middle">{{ band.label }}</text>
+      </g>
+    </g>
     <g class="edges">
-      <path *ngFor="let edge of edges" [attr.d]="getEdgePath(edge)" class="edge" marker-end="url(#arrow)" />
+      <path *ngFor="let edge of edges" [attr.d]="getEdgePath(edge)" class="edge" [class.pathway-edge]="isPathwayEdge(edge)" [class.dimmed-edge]="pathwayNodeIds.length && !isPathwayEdge(edge)" [attr.marker-end]="isPathwayEdge(edge) ? 'url(#arrow-pathway)' : 'url(#arrow)'" />
     </g>
     <g class="nodes">
-      <g *ngFor="let item of layout" class="node" [class.selected]="selectedId === item.node.id"
+      <g *ngFor="let item of layout" class="node" [class.selected]="selectedId === item.node.id" [class.dimmed]="pathwayNodeIds.length && !isInPathway(item.node.id)"
          (click)="onNodeClick(item.node)" [attr.transform]="'translate(' + item.x + ',' + item.y + ')'">
-        <rect [attr.width]="item.width" [attr.height]="item.height" rx="6" class="node-rect" [attr.data-part]="item.node.part" />
+        <rect [attr.width]="item.width" [attr.height]="item.height" rx="8" class="node-rect" [attr.data-part]="item.node.part" />
         <text [attr.x]="item.width/2" [attr.y]="item.height/2" class="node-label" text-anchor="middle" dominant-baseline="middle">{{ item.node.code }}</text>
       </g>
     </g>

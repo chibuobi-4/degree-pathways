@@ -157,6 +157,10 @@ export class DashboardComponent implements OnInit {
     return this.pathway.find(m => m.id === this.selectedModuleId) ?? this.modules.find(m => m.id === this.selectedModuleId) ?? null;
   }
 
+  get pathwayNodeIds(): string[] {
+    return this.pathway.map(m => m.id);
+  }
+
   getLearningOutcomesList(module: Module): string[] {
     const raw = module.learningOutcomes?.trim();
     if (!raw) return [];

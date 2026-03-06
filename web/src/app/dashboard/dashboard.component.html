@@ -86,15 +86,14 @@
     <div class="section-head">
       <h2>Module dependency graph</h2>
       <div class="legend">
-        <span class="legend-item"><span class="legend-dot part-a"></span> Part A</span>
-        <span class="legend-item"><span class="legend-dot part-b"></span> Part B</span>
-        <span class="legend-item"><span class="legend-dot part-c"></span> Part C</span>
+        Part A (green) → Part B (amber) → Part C (pink)
       </div>
     </div>
     <app-graph-view
       [nodes]="graphNodes"
       [edges]="graphEdges"
       [selectedId]="selectedModuleId"
+      [pathwayNodeIds]="pathwayNodeIds"
       (nodeClick)="onNodeClick($event)"
     />
   </section>
