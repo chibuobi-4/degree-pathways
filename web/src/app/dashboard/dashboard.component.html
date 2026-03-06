@@ -1,0 +1,126 @@
+<div class="dashboard">
+  <header class="header">
+    <h1>Degree Programme Pathways</h1>
+    <p class="tagline">See how modules connect from year one to graduation — and which skills each module builds.</p>
+  </header>
+
+  <section class="selling-points">
+    <h2 class="selling-title">Who is this for?</h2>
+    <p class="selling-intro">Use this tool to explore programme structure, prerequisites, and the skills each module develops — so you can make informed choices.</p>
+    <div class="selling-grid">
+      <div class="selling-card">
+        <span class="selling-icon" aria-hidden="true">🎓</span>
+        <h3>Students</h3>
+        <p>Plan your module choices, see which courses lead to the skills you want, and understand the full path from Part A to final year.</p>
+      </div>
+      <div class="selling-card">
+        <span class="selling-icon" aria-hidden="true">👨‍👩‍👧</span>
+        <h3>Parents & guardians</h3>
+        <p>Get a clear picture of how the degree is structured, how modules build on each other, and what your student will learn at each stage.</p>
+      </div>
+      <div class="selling-card">
+        <span class="selling-icon" aria-hidden="true">💼</span>
+        <h3>Employers</h3>
+        <p>See which pathways develop which skills, identify graduates with the right competencies, and understand how the programme maps to your roles.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="controls">
+    <div class="control">
+      <label>University</label>
+      <select [value]="selectedUniversityId ?? ''" (change)="selectedUniversityId = $any($event.target).value; onUniversityChange()">
+        <option value="">— Select —</option>
+        <option *ngFor="let u of universities" [value]="u.id">{{ u.name }}</option>
+      </select>
+    </div>
+    <div class="control">
+      <label>Programme</label>
+      <select [value]="selectedProgrammeId ?? ''" (change)="selectedProgrammeId = $any($event.target).value; onProgrammeChange()">
+        <option value="">— Select —</option>
+        <option *ngFor="let p of programmes" [value]="p.id">{{ p.name }}</option>
+      </select>
+    </div>
+    <div class="control">
+      <label>Catalogue (year)</label>
+      <select [value]="selectedCatalogueId ?? ''" (change)="selectedCatalogueId = $any($event.target).value; onCatalogueChange()">
+        <option value="">— Select —</option>
+        <option *ngFor="let c of catalogues" [value]="c.id">{{ c.academicYear }}</option>
+      </select>
+    </div>
+    <div class="control">
+      <label>Filter by skill</label>
+      <select [value]="skillFilter ?? ''" (change)="skillFilter = $any($event.target).value || null">
+        <option value="">All</option>
+        <option *ngFor="let s of skills" [value]="s.name">{{ s.name }}</option>
+      </select>
+    </div>
+  </div>
+
+  <p class="error" *ngIf="error">{{ error }}</p>
+  <p class="loading" *ngIf="loading">Loading…</p>
+
+  <section class="pathway-section" *ngIf="pathway.length">
+    <app-pathway-panel [pathway]="pathway" [selectedModuleId]="selectedModuleId" />
+  </section>
+
+  <section class="module-detail" *ngIf="selectedModule as mod">
+    <h2>What you'll learn — {{ mod.code }} {{ mod.title }}</h2>
+    <p class="detail-description" *ngIf="mod.description">{{ mod.description }}</p>
+    <div class="detail-outcomes" *ngIf="getLearningOutcomesList(mod).length">
+      <h3>Learning outcomes</h3>
+      <ul>
+        <li *ngFor="let outcome of getLearningOutcomesList(mod)">{{ outcome }}</li>
+      </ul>
+    </div>
+    <div class="detail-skills" *ngIf="getModuleSkills(mod).length">
+      <h3>How it links to skills</h3>
+      <p class="detail-skills-intro">This module develops your ability in the following areas, which build towards later modules and real-world practice:</p>
+      <ul class="skill-tags">
+        <li *ngFor="let skill of getModuleSkills(mod)" class="skill-tag">{{ skill }}</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="graph-section" *ngIf="graphNodes.length">
+    <div class="section-head">
+      <h2>Module dependency graph</h2>
+      <div class="legend">
+        <span class="legend-item"><span class="legend-dot part-a"></span> Part A</span>
+        <span class="legend-item"><span class="legend-dot part-b"></span> Part B</span>
+        <span class="legend-item"><span class="legend-dot part-c"></span> Part C</span>
+      </div>
+    </div>
+    <app-graph-view
+      [nodes]="graphNodes"
+      [edges]="graphEdges"
+      [selectedId]="selectedModuleId"
+      (nodeClick)="onNodeClick($event)"
+    />
+  </section>
+
+  <section class="modules-section" *ngIf="modules.length">
+    <h2>Modules</h2>
+    <div class="modules-grid">
+      <button
+        *ngFor="let m of filteredModules"
+        type="button"
+        class="module-card"
+        [class.part-A]="m.part === 'A'"
+        [class.part-B]="m.part === 'B'"
+        [class.part-C]="m.part === 'C'"
+        [class.selected]="m.id === selectedModuleId"
+        (click)="onModuleClick(m)"
+      >
+        <span class="code">{{ m.code }}</span>
+        <span class="title">{{ m.title }}</span>
+        <span class="meta">Part {{ m.part }} · {{ m.credits ?? 0 }} credits</span>
+        <span class="skills" *ngIf="getModuleSkills(m).length">
+          <strong>Develops:</strong> {{ getModuleSkills(m).join(', ') }}
+        </span>
+      </button>
+    </div>
+  </section>
+
+  <p class="empty" *ngIf="!loading && !error && selectedCatalogueId && !modules.length">No modules in this catalogue.</p>
+</div>

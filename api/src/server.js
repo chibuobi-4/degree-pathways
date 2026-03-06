@@ -244,7 +244,8 @@ app.post('/import/catalogue', auth(['CURATOR', 'ADMIN']), async (req, res) => {
             title: m.title,
             part: m.part,
             credits: m.credits,
-            description: m.description,
+            description: m.description ?? undefined,
+            learningOutcomes: m.learningOutcomes ?? undefined,
             required: !!m.required,
           },
           create: {
@@ -253,7 +254,8 @@ app.post('/import/catalogue', auth(['CURATOR', 'ADMIN']), async (req, res) => {
             title: m.title,
             part: m.part,
             credits: m.credits,
-            description: m.description,
+            description: m.description ?? undefined,
+            learningOutcomes: m.learningOutcomes ?? undefined,
             required: !!m.required,
           },
         });

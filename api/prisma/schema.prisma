@@ -64,6 +64,7 @@ model Module {
   part               String
   credits            Int?
   description        String?
+  learningOutcomes   String?  // newline-separated list of outcomes
   required           Boolean  @default(false)
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt

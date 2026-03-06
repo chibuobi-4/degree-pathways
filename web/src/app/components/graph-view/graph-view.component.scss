@@ -1,0 +1,89 @@
+.graph-container {
+  position: relative;
+  width: 100%;
+  height: 440px;
+  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: grab;
+  touch-action: none;
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.graph-svg {
+  width: 100%;
+  height: 100%;
+  transform-origin: 0 0;
+}
+
+.edge {
+  fill: none;
+  stroke: var(--edge);
+  stroke-width: 2;
+  opacity: 0.85;
+  transition: stroke 0.2s, opacity 0.2s;
+}
+
+.node {
+  cursor: pointer;
+
+  .node-rect {
+    fill: var(--node-bg);
+    stroke: var(--node-border);
+    stroke-width: 2;
+    transition: filter 0.2s, stroke-width 0.2s, filter 0.2s;
+
+    &[data-part="A"] {
+      fill: var(--part-a-bg);
+      stroke: var(--part-a-border);
+    }
+    &[data-part="B"] {
+      fill: var(--part-b-bg);
+      stroke: var(--part-b-border);
+    }
+    &[data-part="C"] {
+      fill: var(--part-c-bg);
+      stroke: var(--part-c-border);
+    }
+  }
+
+  &:hover .node-rect {
+    filter: brightness(1.2);
+    stroke-width: 2.5;
+  }
+
+  &.selected .node-rect {
+    filter: brightness(1.35);
+    stroke-width: 3;
+    stroke: var(--accent-bright);
+    filter: brightness(1.3) drop-shadow(0 0 8px var(--selected-glow));
+  }
+
+  .node-label {
+    fill: #1e293b;
+    font-size: 12px;
+    font-weight: 700;
+    pointer-events: none;
+    letter-spacing: 0.02em;
+  }
+}
+
+.hint {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  font-size: 11px;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.9);
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}

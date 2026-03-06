@@ -1,0 +1,20 @@
+<div class="graph-container" (wheel)="onWheel($event)" (pointerdown)="onPointerDown($event)" (pointermove)="onPointerMove($event)" (pointerup)="onPointerUp($event)" (pointerleave)="onPointerUp($event)">
+  <svg [attr.viewBox]="viewBox" class="graph-svg" [style.transform]="transform">
+    <defs>
+      <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+        <path d="M0,0 L0,6 L9,3 z" fill="var(--edge)" />
+      </marker>
+    </defs>
+    <g class="edges">
+      <path *ngFor="let edge of edges" [attr.d]="getEdgePath(edge)" class="edge" marker-end="url(#arrow)" />
+    </g>
+    <g class="nodes">
+      <g *ngFor="let item of layout" class="node" [class.selected]="selectedId === item.node.id"
+         (click)="onNodeClick(item.node)" [attr.transform]="'translate(' + item.x + ',' + item.y + ')'">
+        <rect [attr.width]="item.width" [attr.height]="item.height" rx="6" class="node-rect" [attr.data-part]="item.node.part" />
+        <text [attr.x]="item.width/2" [attr.y]="item.height/2" class="node-label" text-anchor="middle" dominant-baseline="middle">{{ item.node.code }}</text>
+      </g>
+    </g>
+  </svg>
+  <p class="hint">Scroll to zoom · Drag background to pan · Click a module to see pathway</p>
+</div>

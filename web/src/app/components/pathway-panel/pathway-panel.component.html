@@ -1,0 +1,19 @@
+<div class="pathway-panel" *ngIf="pathway.length">
+  <h3>Pathway (prerequisites → selected)</h3>
+  <div class="chain">
+    <ng-container *ngFor="let m of pathway; let last = last">
+      <span class="node part-{{ m.part }}" [class.selected]="m.id === selectedModuleId" [title]="m.title">
+        {{ m.code }}
+      </span>
+      <span class="arrow" *ngIf="!last">→</span>
+    </ng-container>
+  </div>
+  <p class="hint">
+    <span><span class="dot dot-a"></span> Part A — Foundation</span>
+    <span><span class="dot dot-b"></span> Part B — Core</span>
+    <span><span class="dot dot-c"></span> Part C — Advanced</span>
+  </p>
+</div>
+<div class="pathway-panel empty" *ngIf="!pathway.length && selectedModuleId">
+  <p>Loading pathway…</p>
+</div>

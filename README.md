@@ -5,7 +5,7 @@ Generic web app for understanding degree programme pathways: prerequisite chains
 ## Structure
 
 - **`api/`** — Node.js + Express + Prisma (SQLite dev). Auth (JWT), CRUD for universities/programmes/catalogues/modules/skills, import endpoint, pathway and graph APIs.
-- **`web/`** — (Planned) Angular frontend: graph view, filters, pathway explorer.
+- **`web/`** — Angular frontend: interactive dependency graph (zoom/pan, click nodes), module list with skill filter, pathway panel.
 - **`poc/`** — Original proof-of-concept (static JSON + simple UI). Kept for reference.
 
 ## Quick start (API)
@@ -35,6 +35,12 @@ Generic web app for understanding degree programme pathways: prerequisite chains
    npm run dev
    ```
    API: `http://localhost:4000`
+
+5. **Run Angular frontend** (from repo root)
+   ```bash
+   cd web && npm install && npm start
+   ```
+   App: `http://localhost:4200` (ensure the API is running on 4000)
 
 ## API overview
 

@@ -1,0 +1,45 @@
+:root {
+  /* Bright, eye-catching light theme */
+  --bg: linear-gradient(160deg, #eef2ff 0%, #f5f3ff 35%, #faf5ff 70%, #f0fdfa 100%);
+  --bg-fallback: #f5f3ff;
+  --surface: #ffffff;
+  --surface-elevated: #ffffff;
+  --border: #e2e8f0;
+  --text: #1e293b;
+  --text-muted: #64748b;
+
+  --accent: #6366f1;
+  --accent-bright: #4f46e5;
+
+  /* Part colours — clear and distinct */
+  --part-a: #0d9488;
+  --part-a-bg: rgba(13, 148, 136, 0.12);
+  --part-a-border: #14b8a6;
+  --part-b: #d97706;
+  --part-b-bg: rgba(217, 119, 6, 0.12);
+  --part-b-border: #f59e0b;
+  --part-c: #7c3aed;
+  --part-c-bg: rgba(124, 58, 237, 0.12);
+  --part-c-border: #8b5cf6;
+
+  --edge: #94a3b8;
+  --edge-active: #64748b;
+  --node-bg: #f1f5f9;
+  --node-border: #cbd5e1;
+  --selected-glow: rgba(99, 102, 241, 0.35);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg-fallback);
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}

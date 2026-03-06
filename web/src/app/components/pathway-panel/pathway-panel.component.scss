@@ -1,0 +1,85 @@
+.pathway-panel {
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 1.25rem;
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+
+  h3 {
+    margin: 0 0 0.75rem 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .chain {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .node {
+    display: inline-block;
+    padding: 0.5rem 0.85rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    border: 2px solid transparent;
+    transition: transform 0.15s, box-shadow 0.15s;
+
+    &.part-A {
+      background: var(--part-a-bg);
+      color: var(--part-a);
+      border-color: var(--part-a-border);
+    }
+    &.part-B {
+      background: var(--part-b-bg);
+      color: var(--part-b);
+      border-color: var(--part-b-border);
+    }
+    &.part-C {
+      background: var(--part-c-bg);
+      color: var(--part-c);
+      border-color: var(--part-c-border);
+    }
+
+    &.selected {
+      outline: 2px solid var(--accent-bright);
+      outline-offset: 2px;
+      box-shadow: 0 0 12px var(--selected-glow);
+    }
+  }
+
+  .arrow {
+    color: var(--text-muted);
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .hint {
+    margin: 0.75rem 0 0 0;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+
+    .dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 2px;
+    }
+    .dot-a { background: var(--part-a); }
+    .dot-b { background: var(--part-b); }
+    .dot-c { background: var(--part-c); }
+  }
+
+  &.empty p {
+    margin: 0;
+    color: var(--text-muted);
+  }
+}
